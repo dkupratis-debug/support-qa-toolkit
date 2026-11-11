@@ -57,10 +57,10 @@ _BRACKET_RE = re.compile(
     rf"^\[(?P<ts>{_TS})\]\s+\[?(?P<level>{_LEVEL})\]?\s*(?P<rest>.*)$",
     re.IGNORECASE,
 )
-_ERROR_TYPE_RE = re.compile(
-    r"\berror[_ ]?type=(\"[^\"]+\"|'[^']+'|[A-Za-z_][A-Za-z0-9_]*)",
-    re.IGNORECASE,
-)
+_FIELD_VALUE = r"(\"[^\"]+\"|'[^']+'|[A-Za-z_][A-Za-z0-9_]*)"
+# error_type is searched before exception, matching the JSON key order.
+_ERROR_TYPE_RE = re.compile(rf"\berror[_ ]?type={_FIELD_VALUE}", re.IGNORECASE)
+_EXCEPTION_FIELD_RE = re.compile(rf"\bexception={_FIELD_VALUE}", re.IGNORECASE)
 _EXCEPTION_RE = re.compile(r"\b([A-Z][A-Za-z0-9_]*(?:Error|Exception|Fault))\b")
 _HTTP_5XX_RE = re.compile(r"\b(?:status(?:_code)?|http)\s*[=:]?\s*(5\d\d)\b", re.IGNORECASE)
 _MESSAGE_RE = re.compile(r'\bmessage="([^"]*)"|\bmessage=(\S+)', re.IGNORECASE)
@@ -450,9 +450,10 @@ def _message_from_rest(rest: str) -> str:
 
 
 def _error_type_from_text(text: str) -> str | None:
-    explicit = _ERROR_TYPE_RE.search(text)
-    if explicit:
-        return explicit.group(1).strip().strip('"').strip("'")
+    for pattern in (_ERROR_TYPE_RE, _EXCEPTION_FIELD_RE):
+        explicit = pattern.search(text)
+        if explicit:
+            return explicit.group(1).strip().strip('"').strip("'")
     exception = _EXCEPTION_RE.search(text)
     if exception:
         return exception.group(1)
