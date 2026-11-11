@@ -1,0 +1,5 @@
+{"ts": "2026-03-14T11:00:00Z", "level": "INFO", "message": "worker started", "component": "jobs"}
+{"ts": "2026-03-14T11:00:05Z", "level": "ERROR", "error_type": "JobFailed", "message": "export job 441 failed", "request_id": "job-441"}
+{"ts": "2026-03-14T11:00:06Z", "level": "ERROR", "error_type": "JobFailed", "message": "export job 442 failed", "request_id": "job-442"}
+{"ts": "2026-03-14T11:00:07Z", "level": "ERROR", "error_type": "JobFailed", "message": "export job 443 failed", "request_id": "job-443"}
+{"ts": "2026-03-14T11:30:00Z", "level": "ERROR", "error_type": "JobFailed", "message": "export job 450 failed", "request_id": "job-450"}

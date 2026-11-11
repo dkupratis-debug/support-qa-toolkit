@@ -1,0 +1,21 @@
+{
+  "id": "SUP-1108",
+  "product": "Paperlane",
+  "version": "2.4.1",
+  "environment": "production",
+  "browser": "Firefox 131",
+  "os": "Windows 11",
+  "priority": "urgent",
+  "reported_at": "2026-03-18T14:03:00Z",
+  "role": "member",
+  "frequency": "intermittent",
+  "subject": "Sign-in returns to the login page",
+  "description": "After a correct password, Paperlane returns to the login page instead of the inbox. It does not happen on every attempt.",
+  "steps": [
+    "Open the Paperlane sign-in page",
+    "Enter a valid workspace email and password",
+    "Submit the form"
+  ],
+  "expected": "The inbox loads.",
+  "actual": "The login page loads again with no message. The network panel shows status 500 on POST /session."
+}
