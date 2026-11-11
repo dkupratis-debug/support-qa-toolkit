@@ -145,22 +145,29 @@ class Ticket:
 def load_ticket(path: Path) -> Ticket:
     """Read ``path`` and return a ticket, or raise ``SqtError``."""
 
-    text = read_text(path)
+    text = read_text(path).lstrip("\ufeff")
     if not text.strip():
         raise SqtError("ticket file is empty")
     return parse_ticket(text)
 
 
 def parse_ticket(text: str) -> Ticket:
-    """Parse ticket text that has already been decoded."""
+    """Parse ticket text that has already been decoded.
 
-    stripped = text.lstrip("\ufeff").lstrip()
+    A leading byte-order mark is removed before the format check and before
+    ``json.loads``. ``json.loads`` rejects a BOM on its own (``Unexpected
+    UTF-8 BOM``), which would turn a valid ticket into an input error.
+    """
+
+    normalized = text.lstrip("\ufeff")
+    stripped = normalized.lstrip()
     if stripped.startswith("{") or stripped.startswith("["):
-        return parse_json_ticket(text)
-    return parse_text_ticket(text)
+        return parse_json_ticket(normalized)
+    return parse_text_ticket(normalized)
 
 
 def parse_json_ticket(text: str) -> Ticket:
+    text = text.lstrip("\ufeff")
     try:
         data = json.loads(text)
     except json.JSONDecodeError as exc:

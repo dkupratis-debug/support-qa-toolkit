@@ -135,6 +135,33 @@ def test_python_logging_bracket_fatal_and_http_status(tmp_path: Path) -> None:
     assert kinds["TimeoutError"].example.startswith("paperlane.billing")
 
 
+def test_exception_field_keeps_distinct_types(tmp_path: Path) -> None:
+    path = tmp_path / "exceptions.log"
+    lines = [
+        '2026-03-14T09:00:00Z ERROR api exception=JobFailed message="operation failed"',
+        '2026-03-14T09:01:00Z ERROR api exception=QueueFull message="operation failed"',
+        '2026-03-14T09:02:00Z ERROR api exception=WorkerStopped message="operation failed"',
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    report = triage_file(path)
+    assert [group.error_type for group in report.groups] == [
+        "JobFailed",
+        "QueueFull",
+        "WorkerStopped",
+    ]
+    assert report.repeated == []
+
+
+def test_error_type_field_outranks_exception_field(tmp_path: Path) -> None:
+    path = tmp_path / "both.log"
+    path.write_text(
+        '2026-03-14T09:00:00Z ERROR api exception=QueueFull error_type=TimeoutError message="x"\n',
+        encoding="utf-8",
+    )
+    report = triage_file(path)
+    assert report.groups[0].error_type == "TimeoutError"
+
+
 def test_message_fallback_collapses_ids() -> None:
     assert normalize_message("export job 441 failed") == normalize_message("export job 999 failed")
     assert normalize_message("no digits").startswith("message:")

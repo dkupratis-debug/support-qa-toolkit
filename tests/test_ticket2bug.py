@@ -113,6 +113,27 @@ def test_empty_object_is_a_report_full_of_questions(run_sqt, tmp_path: Path) -> 
     assert "Which product is this" in out
 
 
+def test_json_ticket_with_a_bom_is_a_report(run_sqt, tmp_path: Path) -> None:
+    path = tmp_path / "bom.json"
+    path.write_bytes(b'\xef\xbb\xbf{"id": "SUP-9", "subject": "BOM ticket"}\n')
+    code, out, err = run_sqt(["ticket2bug", str(path)])
+    assert code == 0
+    assert err == ""
+    assert "Traceback" not in err
+    assert "# Bug: BOM ticket" in out
+    assert "- **Source ticket:** SUP-9" in out
+
+
+def test_bom_only_ticket_is_empty(run_sqt, tmp_path: Path) -> None:
+    path = tmp_path / "only-bom.txt"
+    path.write_bytes(b"\xef\xbb\xbf\n")
+    code, out, err = run_sqt(["ticket2bug", str(path)])
+    assert code == 2
+    assert out == ""
+    assert "ticket file is empty" in err
+    assert "Traceback" not in err
+
+
 def test_empty_ticket_is_an_error_without_a_traceback(run_sqt, tmp_path: Path) -> None:
     path = tmp_path / "blank.txt"
     path.write_text("  \n\n", encoding="utf-8")
