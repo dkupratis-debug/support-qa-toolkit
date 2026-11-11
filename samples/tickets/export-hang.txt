@@ -1,0 +1,23 @@
+Ticket: SUP-1042
+Product: Paperlane
+Version: 2.4.1
+Environment: production
+Browser: Chrome 128
+OS: macOS 14.6
+Priority: high
+Reported: 2026-03-14T09:12:00Z
+Role: workspace admin
+Frequency: every time
+Subject: Invoice CSV export spins and never downloads
+
+Description:
+Exporting last month's invoices from Billing never finishes. The button spinner stays up for more than two minutes, no file downloads, and the page shows no error. The browser console shows TypeError: Cannot read properties of undefined (reading 'rows').
+
+Steps I tried:
+1. Signed in as a workspace admin
+2. Opened Billing, then Invoices
+3. Set the date range to the previous calendar month
+4. Clicked Export CSV
+
+Expected: A CSV file downloads within a few seconds.
+Actual: The spinner never stops. No file is saved. The console shows TypeError reading 'rows'.

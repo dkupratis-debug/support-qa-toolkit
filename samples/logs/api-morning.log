@@ -1,0 +1,12 @@
+2026-03-14T09:00:01Z INFO  api request_id=req-100 path=/health status=200
+2026-03-14T09:01:10Z INFO  api request_id=req-101 path=/invoices status=200
+2026-03-14T09:02:14Z ERROR api request_id=req-102 error_type=TimeoutError message="billing upstream timed out" duration_ms=30001
+2026-03-14T09:02:40Z ERROR api request_id=req-103 error_type=TimeoutError message="billing upstream timed out" duration_ms=30004
+2026-03-14T09:03:05Z ERROR api request_id=req-104 error_type=TimeoutError message="billing upstream timed out" duration_ms=30022
+2026-03-14T09:03:30Z ERROR api request_id=req-105 error_type=TimeoutError message="billing upstream timed out" duration_ms=30018
+2026-03-14T09:04:02Z ERROR api request_id=req-106 error_type=TimeoutError message="billing upstream timed out" duration_ms=30011
+2026-03-14T09:04:44Z WARN  api request_id=req-107 message="retrying billing call" attempt=2
+2026-03-14T09:11:02Z ERROR api request_id=req-120 error_type=ValidationError message="invoice.rows missing"
+2026-03-14T09:40:18Z ERROR api request_id=req-188 error_type=TimeoutError message="billing upstream timed out" duration_ms=30009
+2026-03-14T10:15:00Z INFO  api request_id=req-240 path=/health status=200
+2026-03-14T10:16:12Z ERROR api request_id=req-241 error_type=TimeoutError message="billing upstream timed out" duration_ms=30040
